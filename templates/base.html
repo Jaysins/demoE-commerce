@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='images/icons/favicon.png')}}"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/themify/themify-icons.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/Linearicons-Free-v1.0.0/icon-font.min.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/elegant-font/html-css/style.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/animate/animate.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/animsition/css/animsition.min.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/select2/select2.min.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/slick/slick.css')}}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/util.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+    <!--===============================================================================================-->
+</head>
+
+<body class="animsition">
+
+<!-- Header -->
+<header class="header1">
+    <!-- Header desktop -->
+    <div class="container-menu-header">
+        <div class="topbar">
+            <div class="topbar-child2">
+                <div class="topbar-language rs1-select2">
+                    <select class="selection-1" name="time">
+                        <option>NAIRA</option>
+                        <option>CFA</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrap_header">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <img src="{{ url_for('static', filename='images/icons/logo.png')}}" alt='IMG-LOGO'>
+            </a>
+
+            <!-- Menu -->
+            <div class="wrap_menu">
+                <nav class="menu">
+                    <ul class="main_menu">
+                        <li>
+                            <a href="{{ url_for('index') }}">Home</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('add') }}">Add Product</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('cart') }}">Sell</a>
+                        </li>
+
+{#                        <li class="sale-noti">#}
+{#                            <a href="{{ url_for('index') }}">All Products</a>#}
+{#                        </li>#}
+                    </ul>
+                </nav>
+            </div>
+            <!-- Header Icon -->
+        </div>
+    </div>
+
+    <!-- Header Mobile -->
+    <div class="wrap_header_mobile">
+        <!-- Logo moblie -->
+        <a href="index.html" class="logo-mobile">
+            <img src="{{ url_for('static', filename='images/icons/logo.png' )}}" alt='IMG-LOGO'>
+        </a>
+
+        <!-- Button show menu -->
+        <div class="btn-show-menu">
+            <!-- Header Icon mobile -->
+            <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
+					<span class="hamburger-box">
+						<span class="hamburger-inner"></span>
+					</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div class="wrap-side-menu">
+        <nav class="side-menu">
+            <ul class="main-menu">
+
+                <li class="item-menu-mobile">
+                    <a href="{{ url_for('index') }}">Home</a>
+                    <i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="item-menu-mobile">
+                    <a href="{{ url_for('add') }}">Add Product</a>
+                </li>
+
+                <li class="item-menu-mobile">
+                    <a href="{{ url_for('cart') }}">Sell</a>
+                </li>
+
+{#                <li class="item-menu-mobile">#}
+{#                    <a href="product.html">All Products</a>#}
+{#                </li>#}
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Title Page -->
+<main>
+    {% block section %}
+
+    {% endblock %}
+
+    <footer class="bg6 p-t-45 p-b-43 p-l-45 p-r-45">
+        <div class="flex-w p-b-90">
+            <div class="w-size6 p-t-30 p-l-15 p-r-15 respon3">
+                <h4 class="s-text12 p-b-30">
+                    GET IN TOUCH
+                </h4>
+
+                <div>
+                    <p class="s-text7 w-size27">
+                        Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us
+                        on (+1) 96 716 6879
+                    </p>
+
+                    <div class="flex-m p-t-30">
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-facebook"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-instagram"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-pinterest-p"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-snapchat-ghost"></a>
+                        <a href="#" class="fs-18 color1 p-r-20 fa fa-youtube-play"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="t-center p-l-15 p-r-15">
+            <a href="#">
+                <img class="h-size2" src="{{ url_for('static', filename='images/icons/paypal.png')}}" alt="IMG-PAYPAL">
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ url_for('static', filename='images/icons/visa.png')}}" alt='IMG-VISA'>
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ url_for('static', filename='images/icons/mastercard.png')}}" alt="IMG-MASTERCARD">
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ url_for('static', filename='images/icons/express.png')}}" alt="IMG-EXPRESS">
+            </a>
+
+            <a href="#">
+                <img class="h-size2" src="{{ url_for('static', filename='images/icons/discover.png')}}" alt="IMG-DISCOVER">
+            </a>
+
+            <div class="t-center s-text8 p-t-20">
+                Copyright © 2018 All rights reserved. | This template is made with
+                <i class="fa fa-heart-o" aria-hidden="true"></i> by
+                <a href="https://colorlib.com" target="_blank">Colorlib</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Back to top -->
+    <div class="btn-back-to-top bg0-hov" id="myBtn">
+			<span class="symbol-btn-back-to-top">
+				<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+			</span>
+    </div>
+
+    <!-- Container Selection -->
+    <div id="dropDownSelect1"></div>
+    <div id="dropDownSelect2"></div>
+
+
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/jquery/jquery-3.2.1.min.js')}}"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/animsition/js/animsition.min.js')}}"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/bootstrap/js/popper.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/select2/select2.min.js')}}"></script>
+    <script type="text/javascript">
+        $(".selection-1").select2({
+            minimumResultsForSearch: 20,
+            dropdownParent: $('#dropDownSelect1')
+        });
+
+        $(".selection-2").select2({
+            minimumResultsForSearch: 20,
+            dropdownParent: $('#dropDownSelect2')
+        });
+    </script>
+    <!--===============================================================================================-->
+    <!--===============================================================================================-->
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    {% block js %}
+    {% endblock %}
+</main>
+</body>
+
+</html>
