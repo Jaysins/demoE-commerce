@@ -20,34 +20,6 @@
                             <th class="column-4">Available</th>
                             <th class="column-5">Total</th>
                         </tr>
-                        {% for item in temp_cart %}
-                            <tr class="table-row">
-                                <td class="column-1">
-                                    <div class="cart-img-product b-rad-4 o-f-hidden">
-                                        <img src="{{ url_for('static', filename='img/' + item.image) }}"
-                                             alt="IMG-PRODUCT">
-                                    </div>
-                                </td>
-                                <td class="column-2">{{ item.name }}</td>
-                                <td class="column-3">$<span>{{ item.price }}</span>.00</td>
-                                <td class="column-4">
-                                    <div class="flex-w bo5 of-hidden w-size17">
-                                        <button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
-                                            <i class="fs-12 fa fa-minus" aria-hidden="true"></i>
-                                        </button>
-
-                                        <input class="size8 m-text18 t-center num-product" type="number"
-                                               name="num-product{{ item.id }}" value="0">
-
-                                        <button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
-                                            <i class="fs-12 fa fa-plus" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td class="column-4" id="{{ item.id }}">{{ item.quantity }}</td>
-                                <td class="column-5">$<span>0</span>.00</td>
-                            </tr>
-                        {% endfor %}
                     </table>
                 </div>
             </div>
@@ -76,46 +48,72 @@
 {% endblock %}
 
 {% block js %}
-
     <script>
+        var cartItems = JSON.parse(localStorage.getItem('items'));
+        var hold = document.getElementsByTagName('tbody')[0]
+        if (cartItems.length > 1){            
+            for (i=0; i<cartItems.length; i++){                            
+            var table_row = document.createElement('tr');
+            var column_1 = document.createElement('td');
+            var cart_img = document.createElement('div');
+            var img = document.createElement('img');      
+            img.src = "/static/img/" + cartItems[i][4]
+            img.alt = 'IMG-PRODUCT'
+            cart_img.appendChild(img)
+            cart_img.className = "cart-img-product b-rad-4 o-f-hidden"            
+            column_1.appendChild(cart_img)
+            column_1.className = "column-1"
+            table_row.appendChild(column_1)
+            table_row.className = "table-row"
+            var column_2 = document.createElement("td");
+            column_2.className = "column-2"
+            column_2.innerText = cartItems[i][1]
+            table_row.appendChild(column_2)
+            var column_3 = document.createElement("td");
+            column_3.className = "column-3";
+            column_3.innerHTML = "$<span>" + cartItems[i][3]+ "</span>.00"
+            table_row.appendChild(column_3);
+            var column_4 = document.createElement("td");
+            column_4.className = "column-4";
+            var div_btn = document.createElement("div");
+            div_btn.className = "flex-w bo5 of-hidden w-size17";
+            var bt_down = document.createElement("button");
+            bt_down.className = 'btn-num-product-down color1 flex-c-m size7 bg8 eff2';
+            var bt_down_i = document.createElement('i');
+            bt_down_i.className = 'fs-12 fa fa-minus';
+            bt_down_i.setAttribute = 'aria-hidden=true';
+            bt_down.appendChild(bt_down_i);
+            div_btn.appendChild(bt_down);
+            column_4.appendChild(div_btn);
+            var item_val = document.createElement('input');
+            item_val.className = "size8 m-text18 t-center num-product";
+            item_val.value = 0;
+            item_val.type = "number";
+            item_val.name = "num-product"+cartItems[i][0]
+            div_btn.appendChild(item_val);  
+            column_4.appendChild(div_btn);
+            var bt_up = document.createElement("button");
+            bt_up.className = 'btn-num-product-up color1 flex-c-m size7 bg8 eff2';
+            var bt_up_i = document.createElement('i');
+            bt_up_i.className = 'fs-12 fa fa-plus';
+            bt_up_i.setAttribute = 'aria-hidden=true';
+            bt_up.appendChild(bt_up_i);
+            div_btn.appendChild(bt_up);
+            column_4.appendChild(div_btn);
+            table_row.appendChild(column_4);
+            var column_4b = document.createElement('td');
+            column_4b.className = 'column-4';
+            column_4b.id = cartItems[i][0];
+            column_4b.innerText = cartItems[i][2];            
+            table_row.appendChild(column_4b);
+            var column_5 = document.createElement("td");
+            column_5.className = "column-5";
+            column_5.innerHTML = "$<span>0</span>.00"
+            table_row.appendChild(column_5);
+            hold.appendChild(table_row);
+        }        
+    }
 
-        {#var down_btn = $(".btn-num-product-down");#}
-        {#var real_val = 0;#}
-        {#var real_val_for = 0;#}
-        {#down_btn.on("click", function (e) {#}
-        {#    e.preventDefault();#}
-        {#    if (parseInt(this.nextElementSibling.value) === 1) {#}
-        {#        return;#}
-        {#    }#}
-        {#    if (real_val_for === this.nextElementSibling.id) {#}
-        {#        console.log('tsa,e');#}
-        {#        this.offsetParent.nextElementSibling.innerText = parseInt(this.offsetParent.nextElementSibling.innerText) + 1;#}
-        {#    }#}
-        {#    else if ((real_val === 0) && (real_val_for === 0) || (real_val_for !== this.nextElementSibling.id)) {#}
-        {#        real_val = this.offsetParent.nextElementSibling.innerText;#}
-        {#        real_val_for = this.nextElementSibling.id;#}
-        {#        this.offsetParent.nextElementSibling.innerText = parseInt(this.offsetParent.nextElementSibling.innerText) + 1;#}
-        {#        console.log('need chsn')#}
-        {#    }#}
-        {#});#}
-        {#var up_btn = $(".btn-num-product-up");#}
-        {#up_btn.on("click", function (e) {#}
-        {#    e.preventDefault();#}
-        {#    if ((real_val !== 0) && ((parseInt(this.previousElementSibling.value) > real_val))) {#}
-        {#        return#}
-        {#    }#}
-        {#    if (real_val_for === this.previousElementSibling.id) {#}
-        {#        console.log('tsa,e');#}
-        {#        this.offsetParent.nextElementSibling.innerText = parseInt(this.offsetParent.nextElementSibling.innerText) - 1;#}
-        {#    }#}
-        {#    else if ((real_val === 0) && (real_val_for === 0) || (real_val_for !== this.previousElementSibling.id)) {#}
-        {#        real_val = this.offsetParent.nextElementSibling.innerText;#}
-        {#        real_val_for = this.previousElementSibling.id;#}
-        {#        this.offsetParent.nextElementSibling.innerText = parseInt(this.offsetParent.nextElementSibling.innerText) - 1;#}
-        {#        console.log('needcj')#}
-        {#    }#}
-        {#})#}
-
-    </script>
+</script>
 
 {% endblock %}

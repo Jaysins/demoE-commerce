@@ -109,11 +109,10 @@ def add_to_cart():
 
     :return:
     """
-    check_id = Goods.query.filter_by(id=int(request.args['id'])).first()
-    if not check_id:
+    items = Goods.query.filter_by(id=int(request.args['id'])).first()
+    if not items:
         return jsonify({'response': 'failed'})
-    temp_cart.append(check_id)
-    return jsonify({'response': 'success'})
+    return jsonify({'response': 'success', 'id': items.id, 'name': items.name, 'quantity': items.quantity, 'price': items.price, 'image': items.image})
 
 
 @app.route('/error/<message>')

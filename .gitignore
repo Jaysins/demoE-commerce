@@ -1,2 +1,4 @@
 store
 service.db
+__pycache__
+.vscode
