@@ -3,14 +3,14 @@
 <!-- Title Page -->
 <!-- Cart -->
 {% block title %}
-    Cart
+Cart
 {% endblock %}
 {% block section %}
-    <section class="cart bgwhite p-t-70 p-b-100">
-        <div class="container">
-            <!-- Cart item -->
-            <div class="container-table-cart pos-relative">
-                <div class="wrap-table-shopping-cart bgwhite">
+<section class="cart bgwhite p-t-70 p-b-100">
+    <div class="container">
+        <!-- Cart item -->
+        <div class="container-table-cart pos-relative">
+            <div class="wrap-table-shopping-cart bgwhite">                
                     <table class="table-shopping-cart">
                         <tr class="table-head">
                             <th class="column-1"></th>
@@ -19,59 +19,64 @@
                             <th class="column-4 p-l-70">Quantity</th>
                             <th class="column-4">Available</th>
                             <th class="column-5">Total</th>
-                        </tr>
+                        </tr>                        
                     </table>
-                </div>
             </div>
-
-            <div class="flex-w flex-sb-m p-t-25 p-b-25 bo8 p-l-35 p-r-60 p-lr-15-sm">
-                <div class="size10 trans-0-4 m-t-10 m-b-10">
-                    <!-- Button -->
-                    <B>ALL TOTAL</B>
-                </div>
-                <p class="column-5" id="total">$500000 </p>
-            </div>
-
-            <div class="flex-w flex-sb-m p-t-25 p-b-25 bo8 p-l-35 p-r-60 p-lr-15-sm">
-                <div class="size10 trans-0-4 m-t-10 m-b-10">
-                    <!-- Button -->
-                    <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
-                        Update Cart
-                    </button>
-                </div>
-            </div>
-
-            <!-- Total -->
-
         </div>
-    </section>
+        <div class="flex-w flex-sb-m p-t-25 p-b-25 bo8 p-l-35 p-r-60 p-lr-15-sm">
+            <div class="size10 trans-0-4 m-t-10 m-b-10">
+                <!-- Button -->
+                <B>ALL TOTAL</B>
+            </div>
+            <p class="stop column-5" id="total">$00.00</p>
+        </div>
+
+        <div class="flex-w flex-sb-m p-t-25 p-b-25 bo8 p-l-35 p-r-60 p-lr-15-sm">
+            <div class="size10 trans-0-4 m-t-10 m-b-10">
+                <!-- Button -->
+                <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" id="update">
+                    Update Cart
+                </button>
+            </div>
+            <div class="size10 trans-0-4 m-t-10 m-b-10">
+
+                <button type="submit" class="flex-c-m column-5 sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" id="sell">
+                    Sell
+                </button>
+            </div>
+        </div>
+
+        <!-- Total -->
+    </div>
+</section>
 {% endblock %}
 
 {% block js %}
-    <script>
-        var cartItems = JSON.parse(localStorage.getItem('items'));
-        var hold = document.getElementsByTagName('tbody')[0]
-        if (cartItems.length > 1){            
-            for (i=0; i<cartItems.length; i++){                            
+<script>
+    var cartItems = JSON.parse(localStorage.getItem('items'));
+    var hold = document.getElementsByTagName('tbody')[0]
+    if ((cartItems) && (cartItems.length > 0)) {
+        for (i = 0; i < cartItems.length; i++) {
             var table_row = document.createElement('tr');
             var column_1 = document.createElement('td');
             var cart_img = document.createElement('div');
-            var img = document.createElement('img');      
+            var img = document.createElement('img');
             img.src = "/static/img/" + cartItems[i][4]
             img.alt = 'IMG-PRODUCT'
             cart_img.appendChild(img)
-            cart_img.className = "cart-img-product b-rad-4 o-f-hidden"            
+            cart_img.className = "cart-img-product b-rad-4 o-f-hidden"
             column_1.appendChild(cart_img)
             column_1.className = "column-1"
             table_row.appendChild(column_1)
             table_row.className = "table-row"
             var column_2 = document.createElement("td");
             column_2.className = "column-2"
-            column_2.innerText = cartItems[i][1]
+            column_2.innerText = cartItems[i][1]            
+            column_2.id = cartItems[i][0];
             table_row.appendChild(column_2)
             var column_3 = document.createElement("td");
             column_3.className = "column-3";
-            column_3.innerHTML = "$<span>" + cartItems[i][3]+ "</span>.00"
+            column_3.innerHTML = "$<span>" + cartItems[i][3] + "</span>.00"
             table_row.appendChild(column_3);
             var column_4 = document.createElement("td");
             column_4.className = "column-4";
@@ -89,8 +94,7 @@
             item_val.className = "size8 m-text18 t-center num-product";
             item_val.value = 0;
             item_val.type = "number";
-            item_val.name = "num-product"+cartItems[i][0]
-            div_btn.appendChild(item_val);  
+            div_btn.appendChild(item_val);
             column_4.appendChild(div_btn);
             var bt_up = document.createElement("button");
             bt_up.className = 'btn-num-product-up color1 flex-c-m size7 bg8 eff2';
@@ -102,18 +106,55 @@
             column_4.appendChild(div_btn);
             table_row.appendChild(column_4);
             var column_4b = document.createElement('td');
-            column_4b.className = 'column-4';
-            column_4b.id = cartItems[i][0];
-            column_4b.innerText = cartItems[i][2];            
+            column_4b.className = 'column-4';            
+            column_4b.innerText = cartItems[i][2];
             table_row.appendChild(column_4b);
             var column_5 = document.createElement("td");
             column_5.className = "column-5";
-            column_5.innerHTML = "$<span>0</span>.00"
+            column_5.innerHTML = "$<span class='total'>0</span>.00"
             table_row.appendChild(column_5);
             hold.appendChild(table_row);
-        }        
+        }
     }
-
+    else{
+        document.getElementsByClassName('container')[0].innerHTML = '<b>NO ITEM IN CART YET</b>'
+    }
+    $('#update').on("click", function (e) {
+        var all_total = [];
+        e.preventDefault();
+        x = $('.total')
+        if (x.length > 0) {
+            for (i = 0; i < x.length; i++) {
+                all_total.push(parseInt(x[i].innerText));
+            }
+            $('.stop')[0].innerText = '$' + all_total.reduce((a, b) => a + b, 0) + '.00';
+        }
+    })
+    var cart = []
+    $('#sell').on('click', function(e){
+        e.preventDefault()
+        var all_columns = $('.column-2')
+        for (i=0; i<all_columns.length; i++){            
+            var good_id = all_columns[i].id
+            if (good_id !== ''){
+                var good_name = all_columns[i].innerText
+                var good_bought = all_columns[i].parentElement.childNodes[3].children[0].children[1].value
+                cart.push([good_id, good_name, good_bought])
+            }
+        }
+        cart = JSON.stringify(cart)
+        console.log(cart)
+        $.getJSON(window.location.protocol + '//' + document.domain + ':' + window.location.port + '/sale', {
+            cart: cart
+        },
+        function(data){
+            if(data.response === 'success'){
+                alert('total cost: ' + data.cost)
+                localStorage.removeItem('items');
+                document.getElementsByClassName('container')[0].innerHTML = '<b>NO ITEM IN CART YET</b>'
+            }
+        })
+    })
 </script>
 
 {% endblock %}

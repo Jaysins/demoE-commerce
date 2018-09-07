@@ -4,14 +4,13 @@
 Project
 """
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify
+from flask import Flask, render_template, url_for, request, redirect, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadNotAllowed, UploadSet, configure_uploads, IMAGES
 from wtforms import StringField, PasswordField, validators, IntegerField
 from wtforms.validators import InputRequired, Length, Email
 from flask_wtf import FlaskForm
-
-import os
+import os, datetime
 
 app = Flask(__name__)
 
@@ -60,8 +59,12 @@ def index():
     """
     Index
     """
-    all_goods = Goods.query.all()
-    return render_template('index.html', all_goods=all_goods, length=len(all_goods))
+    check_length = Goods.query.all()
+    all_goods = Goods.query.order_by(Goods.id.desc()).limit(6).all()
+    if len(all_goods) <= 1:
+        all_goods = 'No Items yet.'
+
+    return render_template('index.html', all_goods=all_goods, length=len(check_length))
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -123,6 +126,34 @@ def error(message):
     :return:
     """
     return f"<h1> {message} </h1>"
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    print(request.form)
+    result = Goods.query.filter(Goods.name.like("%{}%".format(request.form['search-product']))).all()
+    if 1 > len(result):
+        result = 'No result' 
+    return render_template('index.html', all_goods=result, length=len(result))
+
+
+@app.route('/sale')
+def sale():
+    data = json.loads(request.args['cart'])
+    total_cost = []
+    for i in data:
+        check_good = Goods.query.filter_by(name=i[1], id=int(i[0])).first()
+        if check_good:
+            quantity = int(i[2])
+            if check_good.quantity >= quantity:
+                check_good.quantity = check_good.quantity - quantity
+                total_cost.append(check_good.price * quantity)
+                isold = Sold(product=int(i[0]), quantity=quantity, date=datetime.datetime.now())
+                db.session.add(isold)
+    
+    db.session.commit()
+    total_cost = sum(total_cost)
+    return jsonify({'response': 'success', 'cost': total_cost})
 
 
 if __name__ == '__main__':
