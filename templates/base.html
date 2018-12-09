@@ -62,22 +62,25 @@
             <!-- Menu -->
             <div class="wrap_menu">
                 <nav class="menu">
-                    <ul class="main_menu">
-                        <li>
-                            <a href="{{ url_for('index') }}">Home</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('add') }}">Add Product</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('cart') }}">Sell</a>
-                        </li>
+<ul class="main_menu">
+    <li>
+        <a href="{{ url_for('index') }}">Home</a>
+    </li>
+    <li>
+        <a href="{{ url_for('add') }}">Add Product</a>
+    </li>
+    <li>
+        <a href="{{ url_for('all_products') }}">All Products</a>
+    </li>
+    <li>
+        <a href="{{ url_for('cart') }}">Cart</a>
+    </li>
 
-{#                        <li class="sale-noti">#}
-{#                            <a href="{{ url_for('index') }}">All Products</a>#}
-{#                        </li>#}
-                    </ul>
-                </nav>
+    {# <li class="sale-noti">#}
+        {# <a href="{{ url_for('index') }}">All Products</a>#}
+        {# </li>#}
+</ul>
+</nav>
             </div>
             <!-- Header Icon -->
         </div>

@@ -4,13 +4,14 @@
 Project
 """
 
+import datetime
+import os
 from flask import Flask, render_template, url_for, request, redirect, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 from flask_uploads import UploadNotAllowed, UploadSet, configure_uploads, IMAGES
-from wtforms import StringField, PasswordField, validators, IntegerField
-from wtforms.validators import InputRequired, Length, Email
-from flask_wtf import FlaskForm
-import os, datetime
+
+from forms import LoginForm, AddForm
 
 app = Flask(__name__)
 
@@ -22,7 +23,6 @@ configure_uploads(app, photos)
 
 db = SQLAlchemy(app)
 
-temp_cart = []
 
 class Goods(db.Model):
     """
@@ -45,15 +45,6 @@ class Sold(db.Model):
     quantity = db.Column(db.Integer)
 
 
-class AddForm(FlaskForm):
-    """
-    Register
-    """
-    name = StringField('name', validators=[InputRequired(), Length(min=4, max=30)])
-    quantity = IntegerField('quantity', validators=[InputRequired()])
-    price = IntegerField('price', validators=[InputRequired()])
-
-
 @app.route('/')
 def index():
     """
@@ -65,6 +56,41 @@ def index():
         all_goods = 'No Items yet.'
 
     return render_template('index.html', all_goods=all_goods, length=len(check_length))
+
+
+@app.route('/all_products')
+def all_products():
+    """
+    Index
+    """
+    check_length = Goods.query.all()
+    all_goods = Goods.query.order_by(Goods.id.desc()).limit(6).all()
+    if len(all_goods) <= 1:
+        all_goods = 'No Items yet.'
+
+    return render_template('allProducts.html', all_goods=all_goods, length=len(check_length))
+
+
+# :TODO WORK ON
+@app.route('/products/<int:page_id>')
+def products(page_id):
+    """
+    products
+    """
+    check_length = Goods.query.all()
+    # :TODO FIGURE THIS OUT BRO
+    all_goods = Goods.query.order_by(Goods.id.desc()).limit(6).all()
+    prev = page_id * 6
+    next = page_id * 2
+    all_goods2 = Goods.query.filter(Goods.id > page_id*6).order_by(Goods.id.desc()).limit(6).all()
+    pages = 1
+    length = len(check_length)
+    while True:
+        if length % pages != 0:
+            break
+        pages += 1
+    print(pages)
+    return render_template('product.html', all_goods=all_goods2, length=length, pages=pages)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -88,7 +114,7 @@ def add():
                     filename = photos.save(photo)
             except UploadNotAllowed:
                 return redirect(url_for('error', message='INVALID FILE UPLOAD'))
-        good = Goods(name=data['name'], price=data['price'], quantity=data['quantity'], image=filename)
+        good = Goods(name=data['name'].title(), price=data['price'], quantity=data['quantity'], image=filename)
         db.session.add(good)
         db.session.commit()
         return redirect(url_for('index'))
@@ -103,7 +129,7 @@ def cart():
 
     :return:
     """
-    return render_template('cart.html', temp_cart=temp_cart)
+    return render_template('cart.html')
 
 
 @app.route('/add_to_cart')
@@ -115,7 +141,9 @@ def add_to_cart():
     items = Goods.query.filter_by(id=int(request.args['id'])).first()
     if not items:
         return jsonify({'response': 'failed'})
-    return jsonify({'response': 'success', 'id': items.id, 'name': items.name, 'quantity': items.quantity, 'price': items.price, 'image': items.image})
+    return jsonify(
+        {'response': 'success', 'id': items.id, 'name': items.name, 'quantity': items.quantity, 'price': items.price,
+         'image': items.image})
 
 
 @app.route('/error/<message>')
@@ -131,14 +159,18 @@ def error(message):
 @app.route('/search', methods=['POST'])
 def search():
     print(request.form)
-    result = Goods.query.filter(Goods.name.like("%{}%".format(request.form['search-product']))).all()
+    result = Goods.query.filter(Goods.name.like("%{}%".format(request.form['search-product'].title()))).all()
     if 1 > len(result):
-        result = 'No result' 
+        result = 'No result'
     return render_template('index.html', all_goods=result, length=len(result))
 
 
 @app.route('/sale')
 def sale():
+    """
+
+    :return:
+    """
     data = json.loads(request.args['cart'])
     total_cost = []
     for i in data:
@@ -146,11 +178,11 @@ def sale():
         if check_good:
             quantity = int(i[2])
             if check_good.quantity >= quantity:
-                check_good.quantity = check_good.quantity - quantity
+                check_good.quantity -= quantity
                 total_cost.append(check_good.price * quantity)
                 isold = Sold(product=int(i[0]), quantity=quantity, date=datetime.datetime.now())
                 db.session.add(isold)
-    
+
     db.session.commit()
     total_cost = sum(total_cost)
     return jsonify({'response': 'success', 'cost': total_cost})
